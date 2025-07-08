@@ -20,10 +20,12 @@ jobs:
           fi
       - name: Make commit
         if: steps.random.outputs.RUN_COMMIT == 'true'
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           echo "$(date -u '+%Y-%m-%d %H:%M:%S')" >> contribuition.txt
           git config user.name "${GITHUB_ACTOR}"
           git config user.email "${GITHUB_ACTOR}@users.noreply.github.com"
           git add contribuition.txt
           git commit -m "Add hourly contribution"
-          git push
+          git push https://x-access-token:${GITHUB_TOKEN}@github.com/${{ github.repository }} HEAD:main
